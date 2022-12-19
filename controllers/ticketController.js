@@ -136,7 +136,7 @@ const testGeneratePdf = asyncHandler(async (req, res) => {
       movieId: "63914e6ceab81ed6c0cde4fa",
       seats: "4G, 5G, 6G, 7G",
       theatreId: "639160dcdcf51848245b9aef",
-      ticketDate: "1672202160",
+      movieDateAndTime: "1672202160",
       userId: "63903cb461342d78a860fab3",
     },
     on_behalf_of: null,

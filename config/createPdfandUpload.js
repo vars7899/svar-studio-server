@@ -8,7 +8,7 @@ const createPdfAndUpload = async (ticket) => {
   // add more details to the ticket
   let time = moment(ticket?.movieDateAndTime).format("hh:mm A");
   let date = moment(ticket?.movieDateAndTime).format("MMMM Do YYYY");
-  let hall = (Math.random() * 12 + 1).toFixed(0);
+  let hall = ticket.hall;
   let theatre = ticket.theatre.name;
   let movie = ticket.movie.title;
   let seats = ticket.seats;
