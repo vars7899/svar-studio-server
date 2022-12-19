@@ -21,9 +21,13 @@
     "express": "^4.18.2",
     "express-async-handler": "^1.2.0",
     "express-fileupload": "^1.4.0",
+    "fs-extra": "^11.1.0",
+    "handlebars": "^4.7.7",
     "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.4",
     "mongoose": "^6.8.0",
     "mongoose-autopopulate": "^0.16.1",
+    "puppeteer": "^19.4.1",
     "sib-api-v3-sdk": "^8.4.2",
     "stripe": "^11.2.0"
   },

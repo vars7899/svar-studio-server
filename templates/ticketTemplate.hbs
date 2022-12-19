@@ -1,0 +1,99 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Abel&family=Georama:wght@300;400;500;600;700;800;900&family=Libre+Barcode+128+Text&display=swap"
+      rel="stylesheet"
+    />
+    <title>Ticket</title>
+    <style>
+      * { padding: 0; margin: 0; box-sizing: border-box; font-family: "Georama",
+      sans-serif; } .container { min-height: 100vh; width: 100%; display: flex;
+      align-items: center; justify-content: center; background-color: #fff;
+      flex-direction: column; } .ticketContainer { margin: 30px 0px;background-color: #d8d8d8;
+      border-radius: 10px; padding: 20px 30px; display: grid;
+      grid-template-columns: 500px 250px; position: relative; transform:
+      scale(0.9); } .ticketLeftContainer { padding: 20px; position: relative;
+      border-radius: 10px 5px 5px 10px; } .ticketRightContainer { padding: 20px;
+      display: flex; justify-content: space-between; flex-direction: column; }
+      .seatInformation { display: grid; grid-template-columns: repeat(2, 1fr);
+      margin: 10px 0px; } .cinemaName { text-transform: uppercase; font-family:
+      "Abel", sans-serif; } .seatInformationTextContainer { display: flex;
+      align-items: center; justify-content: center; padding: 20px 0px; border:
+      1px dashed #000; } .seatInformationTextContainer:first-child {
+      border-right: 10px; } .seatInformationText { font-size: 1.4rem;
+      font-weight: 500; } .headingTextSmall { color: #d8d8d8; text-transform:
+      uppercase; font-weight: 900; font-size: 1.6rem; } .headingTextBig {
+      text-transform: uppercase; font-weight: 900; font-size: 2.9rem;
+      font-family: "Inter Tight", sans-serif; letter-spacing: -4px; line-height:
+      2.5rem; margin-bottom: 10px; } .ticketId { position: absolute;
+        right: -137px;
+        transform: rotate(90deg);
+        top: 46%;
+        font-size: 1.2rem;
+        font-weight: 300; } .dot { height: 30px; width: 30px; border-radius: 50%; position:
+      absolute; background-color: #fff; top: 50%; transform: translate(0%,
+      -50%); } .dotLeft { left: -15px; } .dotRight { right: -15px; } .dotLine {
+      border-right: 3px dotted #fff; position: absolute; top: 0; right: 278px;
+      height: 100%; z-index: 10; } .movieName { text-transform: uppercase;
+      font-family: "Abel", sans-serif; font-weight: 900; font-size: 1.25rem; }
+      .showDetails { text-transform: uppercase; font-family: "Abel", sans-serif;
+      font-size: 1.25rem; font-weight: 900; }.id{text-transform: uppercase; } .ticketIdRight { font-family:
+      "Abel", sans-serif; font-size: 1.2rem; }.barcode { font-size: 3rem;
+      font-family: "Libre Barcode 128 Text",cursive; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      {{#each seats as |seat|}}
+        <div class="ticketContainer">
+          <div class="dot dotLeft"></div>
+          <div class="dot dotRight"></div>
+          <div class="dotLine"></div>
+          <div class="ticketLeftContainer dynamicColorContainer">
+            <p class="cinemaName">{{../theatre}}</p>
+            <div class="seatInformation">
+              <div class="seatInformationTextContainer">
+                <p class="seatInformationText">HALL {{../hall}}</p>
+              </div>
+              <div class="seatInformationTextContainer">
+                <p class="seatInformationText">SEAT {{seat}}</p>
+              </div>
+            </div>
+            <p class="headingTextSmall">adult ticket</p>
+            <p class="headingTextBig">the svar studio</p>
+            <p class="barcode">https://github.com/vars7899</p>
+            <div class="id ticketId">
+              <p>{{../_id}}</p>
+            </div>
+          </div>
+          <div class="ticketRightContainer">
+            <div>
+              <p class="cinemaName">{{../theatre}}</p>
+              <p class="id ticketIdRight dynamicColor">{{../_id}}</p>
+            </div>
+            <p class="movieName">{{../movie}}</p>
+            <div>
+              <p class="showDetails">Admit 1</p>
+              <p class="showDetails">{{../date}}</p>
+              <p class="showDetails">{{../time}}</p>
+            </div>
+          </div>
+        </div>
+      {{/each}}
+    </div>
+  </body>
+  <script>
+    const colorArray = ["#a17a35", "#79849f", "#6b8b6e", "#9a6c9c"]; const
+    backgroundBlock = document.getElementsByClassName( "dynamicColorContainer"
+    ); const colorBlock = document.getElementsByClassName("dynamicColor"); for
+    (let idx = 0; idx < backgroundBlock.length; idx++) { const randomColor =
+    colorArray[(Math.random() * 3).toFixed(0)];
+    backgroundBlock[idx].style.background = randomColor;
+    colorBlock[idx].style.color = randomColor; }
+  </script>
+</html>

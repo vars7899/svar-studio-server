@@ -1,15 +1,18 @@
 const sendEmailToClient = require("../middleware/sendEmail");
 const Ticket = require("../models/ticketModel");
 const User = require("../models/userModel");
+const createPdfAndUpload = require("./createPdfandUpload");
 
 async function sendTicket(payment) {
-  const { last4, network, funding } = payment.payment_method_details;
-  const { movieId, hall, seats, theatreId, userId, ticketDate } =
+  let { last4, network, funding } = payment.payment_method_details;
+  let { movieId, hall, seats, theatreId, userId, ticketDate } =
     payment.metadata;
-  const { amount, receipt_url, paid, created, id } = payment;
+  let { amount, receipt_url, paid, created, id } = payment;
+  // convert the seat back to an array
+  seats = seats.split(",");
   try {
     // create a new ticket in db
-    const ticket = await Ticket.create({
+    let ticket = await Ticket.create({
       user: userId,
       theatre: theatreId,
       movie: movieId,
@@ -27,20 +30,37 @@ async function sendTicket(payment) {
         cardBrand: network,
       },
     });
+    // populate the ticket with whole data
+    let populatedTicket = await Ticket.findById(ticket._id)
+      .populate({ path: "movie", select: "title" })
+      .populate({
+        path: "theatre",
+        select: "-movies -address name",
+      })
+      .select("-paymentDetails");
+
+    // create and upload ticket pdf
+    const _pdfTicket = await createPdfAndUpload(populatedTicket);
     const userDetails = await User.findById(userId);
     if (userDetails) {
       sendEmailToClient(
         "The Svar Studio",
-        "verfication@svar.com",
+        "ticket@svar.com",
         userDetails.email,
-        "Verify your svar studio account",
+        `Congratulation, Grab your ticket`,
         `
         <div>
-        ${receipt_url}
+          <div>${receipt_url}</div>
+          <div>${_pdfTicket.url}</div>
         </div>
         `
       );
     }
+    return {
+      success: true,
+      message: "PDF ticket generated and uploaded successfully",
+      ticket: _pdfTicket.url,
+    };
   } catch (err) {
     console.log(err);
   }
