@@ -5,7 +5,7 @@ const createPdfAndUpload = require("./createPdfandUpload");
 
 async function sendTicket(payment) {
   let { last4, network, funding } = payment.payment_method_details;
-  let { movieId, hall, seats, theatreId, userId, ticketDate } =
+  let { movieId, seats, theatreId, userId, movieDateAndTime } =
     payment.metadata;
   let { amount, receipt_url, paid, created, id } = payment;
   // convert the seat back to an array
@@ -18,7 +18,7 @@ async function sendTicket(payment) {
       movie: movieId,
       seats: seats,
       hall: hall,
-      movieDateAndTime: ticketDate,
+      movieDateAndTime: movieDateAndTime,
       paymentDetails: {
         paymentDate: created,
         paymentStatus: paid,
