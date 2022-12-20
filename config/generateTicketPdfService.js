@@ -35,7 +35,6 @@ async function generatePdf(ticket) {
       await page.pdf({
         path: "invoice.pdf",
         format: "A4",
-        // width: "302.36220472441 px",
         printBackground: true,
       });
 
