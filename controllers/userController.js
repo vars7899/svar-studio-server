@@ -262,7 +262,7 @@ const updatePassword = asyncHandler(async (req, res) => {
 
 const updateUserDetails = asyncHandler(async (req, res) => {
   const { fullName, address } = req.body;
-  const image = req.files.image.tempFilePath;
+  const image = req.files?.image.tempFilePath;
 
   const userExist = await User.findById(req.user._id);
 
@@ -271,27 +271,32 @@ const updateUserDetails = asyncHandler(async (req, res) => {
     throw new Error("User does not exist, please try again");
   }
 
+  let updatedUser = await User.findByIdAndUpdate(
+    req.user._id,
+    { fullName },
+    { new: true }
+  );
+
   // destroy older image and upload new image
-  if (image) {
+  if (req.files) {
     await cloudinary.v2.uploader.destroy(userExist.image.public_id);
 
     var cloudImage = await cloudinary.v2.uploader.upload(image, {
       folder: "movieApp",
     });
     fs.rmSync("./tmp", { recursive: true });
-  }
 
-  const updatedUser = await User.findByIdAndUpdate(
-    req.user._id,
-    {
-      fullName,
-      image: {
-        public_id: cloudImage.public_id,
-        url: cloudImage.secure_url,
+    updatedUser = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        image: {
+          public_id: cloudImage.public_id,
+          url: cloudImage.secure_url,
+        },
       },
-    },
-    { new: true }
-  );
+      { new: true }
+    );
+  }
 
   if (address) {
     const { street, city, state, country, postalCode, lat, lng } = address;
