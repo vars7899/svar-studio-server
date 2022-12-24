@@ -261,7 +261,8 @@ const updatePassword = asyncHandler(async (req, res) => {
 });
 
 const updateUserDetails = asyncHandler(async (req, res) => {
-  const { fullName, address } = req.body;
+  const { fullName, street, city, state, country, postalCode, lat, lng } =
+    req.body;
   const image = req.files?.image.tempFilePath;
 
   const userExist = await User.findById(req.user._id);
@@ -298,9 +299,7 @@ const updateUserDetails = asyncHandler(async (req, res) => {
     );
   }
 
-  if (address) {
-    const { street, city, state, country, postalCode, lat, lng } = address;
-
+  if (street || city || state || country || postalCode) {
     // update address
     await Address.findByIdAndUpdate(
       updatedUser.address,
