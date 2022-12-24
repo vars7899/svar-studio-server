@@ -171,10 +171,65 @@ const createNewMovie = asyncHandler(async (req, res) => {
   });
 });
 
+const searchMovieByKeyword = asyncHandler(async (req, res) => {
+  try {
+    const keyword = req.query.search
+      ? {
+          $or: [
+            { title: { $regex: req.query.search, $options: "i" } },
+            { originalTitle: { $regex: req.query.search, $options: "i" } },
+            { originalLanguage: { $regex: req.query.search, $options: "i" } },
+          ],
+        }
+      : {};
+    const queryResult = await Movie.find(keyword);
+
+    if (queryResult.length === 0) {
+      res.status(200).json({
+        success: false,
+        message: "No Movie Exist",
+        movieList: [],
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "Data fetched successfully",
+      movieList: queryResult,
+    });
+  } catch (err) {
+    res.status(500);
+    throw new Error(err);
+  }
+});
+
+const searchMovieByGenre = asyncHandler(async (req, res) => {
+  try {
+    const queryResult = await Movie.find({ genres: req.query.search });
+
+    if (queryResult.length === 0) {
+      res.status(200).json({
+        success: false,
+        message: "No Movie Exist",
+        movieList: [],
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "Data fetched successfully",
+      movieList: queryResult,
+    });
+  } catch (err) {
+    res.status(500);
+    throw new Error(err);
+  }
+});
+
 module.exports = {
   getAllMovie,
   getMovieById,
   updateMovieDetails,
   deleteMovieById,
   createNewMovie,
+  searchMovieByKeyword,
+  searchMovieByGenre,
 };
